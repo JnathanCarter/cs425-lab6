@@ -15,13 +15,12 @@ public class RegistrationDAO {
             + "WHERE `session`.id = ? AND attendee.id = ?";
 
     private final String QUERY_CREATE = "INSERT INTO registration (attendeeid, sessionid)"
-                                        + "VALUES (?,?)";
+            + "VALUES (?,?)";
 
     private final String QUERY_UPDATE = "UPDATE registration SET attendeeid = ?, sessionid = ?"
-                                        +"WHERE (attendeeid = ? AND sessionid = ?)";
+            + "WHERE (attendeeid = ? AND sessionid = ?)";
 
     private final String QUERY_DELETE = "DELETE FROM registration WHERE (attendeeid = ? AND sessionid = ?)";
-
 
     RegistrationDAO(DAOFactory dao) {
         this.daoFactory = dao;
@@ -101,121 +100,166 @@ public class RegistrationDAO {
 
     }
 
-/**
-*Add a registration for a new attendee (a person not already registered for a session)
-*POST REQUEST
-*/
-public String create(int sessionid, int attendeeid){
-    JSONObject json = new JSONObject();
-    
-    json.put("success", false);
-    PreparedStatement ps = null;
-    ResultSet rs = null;
+    /**
+     * Add a registration for a new attendee (a person not already registered for a
+     * session)
+     * POST REQUEST
+     */
+    public String create(int sessionid, int attendeeid) {
+        JSONObject json = new JSONObject();
 
-    try{
-        Connection conn = daoFactory.getConnection();
+        json.put("success", false);
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-        ps = conn.prepareStatement(QUERY_CREATE);
-        ps.setInt(1,attendeeid);
-        ps.setInt(2,sessionid);
+        try {
+            Connection conn = daoFactory.getConnection();
 
-        int updateCount = ps.executeUpdate();
+            ps = conn.prepareStatement(QUERY_CREATE);
+            ps.setInt(1, attendeeid);
+            ps.setInt(2, sessionid);
 
-        if(updateCount > 0){
-            json.put("success",true);
-            json.put("rowsAffected",updateCount);
-            
+            int updateCount = ps.executeUpdate();
+
+            if (updateCount > 0) {
+                json.put("success", true);
+                json.put("rowsAffected", updateCount);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return JSONValue.toJSONString(json);
     }
-    catch (Exception e){e.printStackTrace();}
-     
-     finally {
-            
-            if (rs != null) { try { rs.close(); } catch (Exception e) { e.printStackTrace(); } }
-            if (ps != null) { try { ps.close(); } catch (Exception e) { e.printStackTrace(); } }
-            
-        }
-    return JSONValue.toJSONString(json);
-}
 
     // Update a registration for a previously-registered attendee (to change their
     // assigned session)
-    //PUT REQUEST
-    public String update(int sessionid_old, int attendeeid_old,int sessionid_updated, int attendeeid_updated){
-    JSONObject json = new JSONObject();
-    
-    json.put("success", false);
-    PreparedStatement ps = null;
-    ResultSet rs = null;
+    // PUT REQUEST
+    /**
+     * 
+     * @param sessionid_old
+     * @param attendeeid_old
+     * @param sessionid_updated
+     * @param attendeeid_updated
+     * @return
+     */
+    public String update(int sessionid_old, int attendeeid_old, int sessionid_updated, int attendeeid_updated) {
+        JSONObject json = new JSONObject();
 
-    try{
-        Connection conn = daoFactory.getConnection();
+        json.put("success", false);
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-        ps = conn.prepareStatement(QUERY_UPDATE);
-        ps.setInt(1,attendeeid_old);
-        ps.setInt(2,sessionid_old);
-        ps.setInt(3,attendeeid_updated);
-        ps.setInt(4,sessionid_updated);
+        try {
+            Connection conn = daoFactory.getConnection();
 
-        int updateCount = ps.executeUpdate();
-       
-        if(updateCount > 0){
-            json.put("success",true);
-            json.put("rowsAffected",updateCount);
-            
+            ps = conn.prepareStatement(QUERY_UPDATE);
+            ps.setInt(1, attendeeid_old);
+            ps.setInt(2, sessionid_old);
+            ps.setInt(3, attendeeid_updated);
+            ps.setInt(4, sessionid_updated);
+
+            int updateCount = ps.executeUpdate();
+
+            if (updateCount > 0) {
+                json.put("success", true);
+                json.put("rowsAffected", updateCount);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        finally {
 
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return JSONValue.toJSONString(json);
     }
-    catch (Exception e){e.printStackTrace();}
-     
-     finally {
-            
-            if (rs != null) { try { rs.close(); } catch (Exception e) { e.printStackTrace(); } }
-            if (ps != null) { try { ps.close(); } catch (Exception e) { e.printStackTrace(); } }
-            
-        }
-    return JSONValue.toJSONString(json);
-}
-
 
     // Cancel a registration for a previously-registered attendee.
     // DELETE REQUEST
 
-public String delete(int attendeeid, int sessionid){
-    JSONObject json = new JSONObject();
-    
-    json.put("success", false);
-    PreparedStatement ps = null;
-    ResultSet rs = null;
+    public String delete(int attendeeid, int sessionid) {
+        JSONObject json = new JSONObject();
 
-    try{
-        Connection conn = daoFactory.getConnection();
+        json.put("success", false);
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-        ps = conn.prepareStatement(QUERY_DELETE);
-        ps.setInt(1, attendeeid);
-        ps.setInt(2,sessionid);
-       
-       int updateCount = ps.executeUpdate();
+        try {
+            Connection conn = daoFactory.getConnection();
 
-       if(updateCount > 0){
-            json.put("success",true);
-            json.put("rowsAffected",updateCount);
-            
+            ps = conn.prepareStatement(QUERY_DELETE);
+            ps.setInt(1, attendeeid);
+            ps.setInt(2, sessionid);
+
+            int updateCount = ps.executeUpdate();
+
+            if (updateCount > 0) {
+                json.put("success", true);
+                json.put("rowsAffected", updateCount);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        finally {
 
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return JSONValue.toJSONString(json);
     }
-    catch (Exception e){e.printStackTrace();}
-     
-     finally {
-            
-            if (rs != null) { try { rs.close(); } catch (Exception e) { e.printStackTrace(); } }
-            if (ps != null) { try { ps.close(); } catch (Exception e) { e.printStackTrace(); } }
-            
-        }
-    return JSONValue.toJSONString(json);
-}
 
 }

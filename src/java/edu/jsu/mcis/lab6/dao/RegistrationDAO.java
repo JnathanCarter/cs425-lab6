@@ -14,7 +14,13 @@ public class RegistrationDAO {
             + "JOIN `session` ON registration.sessionid = `session`.id) "
             + "WHERE `session`.id = ? AND attendee.id = ?";
 
-    private final String QUERY_CREATE = "INSERT INTO registration (attendeeid, sessionid) VALUES (?,?)";
+    private final String QUERY_CREATE = "INSERT INTO registration (attendeeid, sessionid)"
+                                        + "VALUES (?,?)";
+
+    private final String QUERY_UPDATE = "UPDATE registration SET attendeeid = ?, sessionid = ?"
+                                        +"WHERE (attendee id = ? AND sessionid = ?)";
+
+
 
     RegistrationDAO(DAOFactory dao) {
         this.daoFactory = dao;
@@ -112,14 +118,12 @@ public String create(int sessionid, int attendeeid){
         ps.setInt(1,attendeeid);
         ps.setInt(2,sessionid);
 
-        boolean hasresults = ps.execute();
+        int updateCount = ps.executeUpdate();
 
-        if(hasresults){
-            rs = ps.getResultSet();
-
-            if(rs.next()){
-                json.put("success",hasresults);
-            }
+        if(updateCount > 0){
+            json.put("success",true);
+            json.put("rowsAffected",updateCount);
+            
         }
 
     }
@@ -136,7 +140,40 @@ public String create(int sessionid, int attendeeid){
 
     // Update a registration for a previously-registered attendee (to change their
     // assigned session)
+    //PUT REQUEST
+    public String update(int sessionid_old, int attendeeid_old,int sessionid_updated, int attendeeid_updated){
+    JSONObject json = new JSONObject();
+    
+    json.put("success", false);
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    try{
+        Connection conn = daoFactory.getConnection();
+
+        ps = conn.prepareStatement(QUERY_UPDATE);
+        ps.setInt(1,attendeeid_old);
+        ps.setInt(2,sessionid_old);
+        ps.setInt(3,attendeeid_updated);
+        ps.setInt(4,sessionid_updated);
+
+       
+
+    }
+    catch (Exception e){e.printStackTrace();}
+     
+     finally {
+            
+            if (rs != null) { try { rs.close(); } catch (Exception e) { e.printStackTrace(); } }
+            if (ps != null) { try { ps.close(); } catch (Exception e) { e.printStackTrace(); } }
+            
+        }
+    return JSONValue.toJSONString(json);
+}
+
 
     // Cancel a registration for a previously-registered attendee.
+    // DELETE REQUEST
+
 
 }

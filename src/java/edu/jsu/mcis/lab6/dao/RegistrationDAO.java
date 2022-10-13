@@ -104,7 +104,9 @@ public class RegistrationDAO {
     /**
      * Add a registration for a new attendee (a person not already registered for a
      * session)
-     * POST REQUEST
+     * POST REQUEST for testing = curl -v -X POST
+     * 192.168.1.178:8180/Lab6/registrations -d attendeeid=2 -d sessionid=2
+     * 
      */
     public String create(int sessionid, int attendeeid) {
         JSONObject json = new JSONObject();
@@ -116,7 +118,7 @@ public class RegistrationDAO {
         try {
             Connection conn = daoFactory.getConnection();
 
-            ps = conn.prepareStatement(QUERY_CREATE,Statement.RETURN_GENERATED_KEYS);
+            ps = conn.prepareStatement(QUERY_CREATE, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, attendeeid);
             ps.setInt(2, sessionid);
 

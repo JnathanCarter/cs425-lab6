@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import org.json.simple.*;
+import java.sql.Statement;
 
 public class RegistrationDAO {
 
@@ -115,7 +116,7 @@ public class RegistrationDAO {
         try {
             Connection conn = daoFactory.getConnection();
 
-            ps = conn.prepareStatement(QUERY_CREATE);
+            ps = conn.prepareStatement(QUERY_CREATE,Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, attendeeid);
             ps.setInt(2, sessionid);
 

@@ -131,32 +131,57 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) {
-        // INSERT YOUR CODE HERE
-        DAOFactory daoFactory = null;
+        
+       //get parameters from the request 
+       BufferedReader br = null;
+       response.setContentType("application/json;charset=UTF-8");
+       try (PrintWriter out = response.getWriter()) {
+           br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+           String p = URLDecoder.decode(br.readLine().trim(), Charset.defaultCharset());
+           HashMap<String, String> parameters = new HashMap<>();
+           String[] pairs = p.trim().split("&");
+       
+       for (int i = 0; i < pairs.length; ++i) {
+           String[] pair = pairs[i].split("=");
+           parameters.put(pair[0], pair[1]);
+       }
+       
+      //get id parameter from request 
+       int attendeeid_old = Integer.parseInt(parameters.get("attendeeid"));
+       int sessionid_old  = Integer.parseInt(parameters.get("sessionid"));
+       // rest of servlet code goes here
+   
+       DAOFactory daoFactory = null;
 
-        ServletContext context = request.getServletContext();
+       ServletContext context = request.getServletContext();
 
-        if (context.getAttribute("daoFactory") == null) {
-            System.err.println("*** Creating new DAOFactory ...");
-            daoFactory = new DAOFactory();
-            context.setAttribute("daoFactory", daoFactory);
-        } else {
-            daoFactory = (DAOFactory) context.getAttribute("daoFactory");
-        }
+       if (context.getAttribute("daoFactory") == null) {
+           System.err.println("*** Creating new DAOFactory ...");
+           daoFactory = new DAOFactory();
+           context.setAttribute("daoFactory", daoFactory);
+       } else {
+           daoFactory = (DAOFactory) context.getAttribute("daoFactory");
+       }
 
-        response.setContentType("application/json; charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+       try (PrintWriter out = response.getWriter()) {
 
-            int sessionid = Integer.parseInt(request.getParameter("sessionid"));
-            int attendeeid = Integer.parseInt(request.getParameter("attendeeid"));
 
-            RegistrationDAO dao = daoFactory.getRegistrationDAO();
+           RegistrationDAO dao = daoFactory.getRegistrationDAO();
 
-            out.println(dao.delete(attendeeid, sessionid));
+           out.println(dao.delete(attendee,sessionid));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+       } 
+
+      
+   
+   catch (Exception e) { e.printStackTrace(); }
+   finally {
+       if (br != null) {
+           try { br.close(); } catch (Exception e) { e.printStackTrace(); }
+       }
+   }
+
+
     }
 
     @Override

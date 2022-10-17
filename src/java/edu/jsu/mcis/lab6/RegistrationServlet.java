@@ -74,7 +74,28 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
-        // INSERT YOUR CODE HERE
+        
+       //get parameters from the request 
+        BufferedReader br = null;
+        response.setContentType("application/json;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            String p = URLDecoder.decode(br.readLine().trim(), Charset.defaultCharset());
+            HashMap<String, String> parameters = new HashMap<>();
+            String[] pairs = p.trim().split("&");
+        
+        for (int i = 0; i < pairs.length; ++i) {
+            String[] pair = pairs[i].split("=");
+            parameters.put(pair[0], pair[1]);
+        }
+        
+       //get id parameter from request 
+        int attendeeid_old = Integer.parseInt(parameters.get("attendeeid_old"));
+        int sessionid_old  = Integer.parseInt(parameters.get("sessionid_old"));
+        int attendeeid_updated = Integer.parseInt(parameters.get("attendeeid_updated"));
+        int sessionid_updated = Integer.parseInt(parameters.get("sessionid_updated"));
+        // rest of servlet code goes here
+    
         DAOFactory daoFactory = null;
 
         ServletContext context = request.getServletContext();
@@ -87,21 +108,24 @@ public class RegistrationServlet extends HttpServlet {
             daoFactory = (DAOFactory) context.getAttribute("daoFactory");
         }
 
-        response.setContentType("application/json; charset=UTF-8");
-
         try (PrintWriter out = response.getWriter()) {
 
-            int sessionid_old = Integer.parseInt(request.getParameter("sessionid_old"));
-            int attendeeid_old = Integer.parseInt(request.getParameter("attendeeid_old"));
-            int sessionid_updated = Integer.parseInt(request.getParameter("sessionid_updated"));
-            int attendeeid_updated = Integer.parseInt(request.getParameter("attendeeid_updated"));
 
             RegistrationDAO dao = daoFactory.getRegistrationDAO();
+
             out.println(dao.update(sessionid_old, attendeeid_old, sessionid_updated, attendeeid_updated));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } 
+
+       
+    
+    catch (Exception e) { e.printStackTrace(); }
+    finally {
+        if (br != null) {
+            try { br.close(); } catch (Exception e) { e.printStackTrace(); }
         }
+    }
+ 
 
     }
 

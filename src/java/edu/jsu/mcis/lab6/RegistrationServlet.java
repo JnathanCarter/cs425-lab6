@@ -97,7 +97,6 @@ public class RegistrationServlet extends HttpServlet {
             int attendeeid_updated = Integer.parseInt(request.getParameter("attendeeid_updated"));
 
             RegistrationDAO dao = daoFactory.getRegistrationDAO();
-
             out.println(dao.update(sessionid_old, attendeeid_old, sessionid_updated, attendeeid_updated));
 
         } catch (Exception e) {

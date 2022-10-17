@@ -9,6 +9,6 @@ package edu.jsu.mcis.lab6.dao;
  *
  * @author johnc
  */
-public class TrainingClassDAO {
+public class TrainingSessionsDAO {
     
 }

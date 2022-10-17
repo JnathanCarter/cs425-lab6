@@ -50,10 +50,10 @@ public class DAOFactory {
     public AttendeesDAO getAttendeesDAO(){
         return new AttendeesDAO(this);
     }
-     
-     public TrainingSessions getTrainingSessionsDAO(){
-        return new getTrainingSessionsDAO(this);
+   */  
+     public TrainingSessionsDAO getTrainingSessionsDAO(){
+        return new TrainingSessionsDAO(this);
     }
-*/
+
 
 }

@@ -105,7 +105,7 @@ public class RegistrationDAO {
      * Add a registration for a new attendee (a person not already registered for a
      * session)
      * POST REQUEST for testing = curl -v -X POST
-     * 192.168.1.178:8180/Lab6/registrations -d attendeeid=2 -d sessionid=2
+     192.168.1.178:8180/Lab6/registrations -d attendeeid=2 -d sessionid=2
      * 
      */
     public String create(int sessionid, int attendeeid) {
@@ -175,12 +175,18 @@ public class RegistrationDAO {
 
         try {
             Connection conn = daoFactory.getConnection();
-
+    /*
             ps = conn.prepareStatement(QUERY_UPDATE);
             ps.setInt(1, attendeeid_old);
             ps.setInt(2, sessionid_old);
             ps.setInt(3, attendeeid_updated);
             ps.setInt(4, sessionid_updated);
+*/  
+            ps = conn.prepareStatement(QUERY_UPDATE);
+            ps.setInt(1,1);
+            ps.setInt(2, 1);
+            ps.setInt(3, 100);
+            ps.setInt(4, 100);
 
             int updateCount = ps.executeUpdate();
 

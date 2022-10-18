@@ -175,18 +175,12 @@ public class RegistrationDAO {
 
         try {
             Connection conn = daoFactory.getConnection();
-    /*
+    
             ps = conn.prepareStatement(QUERY_UPDATE);
             ps.setInt(1, attendeeid_old);
             ps.setInt(2, sessionid_old);
             ps.setInt(3, attendeeid_updated);
             ps.setInt(4, sessionid_updated);
-*/  
-            ps = conn.prepareStatement(QUERY_UPDATE);
-            ps.setInt(1,1);
-            ps.setInt(2, 1);
-            ps.setInt(3, 100);
-            ps.setInt(4, 100);
 
             int updateCount = ps.executeUpdate();
 

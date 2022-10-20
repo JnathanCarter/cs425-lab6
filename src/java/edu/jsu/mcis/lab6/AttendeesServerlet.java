@@ -24,11 +24,6 @@ import java.util.logging.Logger;
  * @author johnc
  */
 public class AttendeesServerlet extends HttpServlet {
-    private final String QUERY_REGISTRATION_NUMBER = "SELECT CONCAT(\"R\", LPAD(?, 6, 0)) AS num FROM registration;";
-    private final String QUERY_SELECT_BY_ID = "";
-    private final String QUERY_CREATE = "";
-    private final String QUERY_UPDATE = "";
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         DAOFactory daoFactory = null;
@@ -47,12 +42,11 @@ public class AttendeesServerlet extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
 
-            int sessionid = Integer.parseInt(request.getParameter("sessionid"));
             int attendeeid = Integer.parseInt(request.getParameter("attendeeid"));
 
-            RegistrationDAO dao = daoFactory.getRegistrationDAO();
+            AttendeesDAO dao = daoFactory.getAttendeesDAO();
 
-            out.println(dao.find(sessionid, attendeeid));
+            out.println(dao.find(attendeeid));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,18 +71,20 @@ public class AttendeesServerlet extends HttpServlet {
         response.setContentType("application/json; charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            int sessionid = Integer.parseInt(request.getParameter("sessionid"));
-            int attendeeid = Integer.parseInt(request.getParameter("attendeeid"));
+            String firstname = request.getParameter("firstname");
+            String lastname = request.getParameter("lastname");
+            String displayname = request.getParameter("displayname");
 
-            RegistrationDAO dao = daoFactory.getAttendeesDAO();
+            AttendeesDAO dao = daoFactory.getAttendeesDAO();
 
-            out.println(dao.create(sessionid, attendeeid));
+            out.println(dao.create(firstname,lastname, displayname));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /*
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
 
@@ -122,9 +118,9 @@ public class AttendeesServerlet extends HttpServlet {
                 daoFactory = (DAOFactory) context.getAttribute("daoFactory");
             }
 
-            RegistrationDAO dao = daoFactory.getAttendeesDAO();
+            AttendeesDAO dao = daoFactory.getAttendeesDAO();
 
-            out.println(dao.delete(attendeeid, sessionid));
+            out.println(dao.update(attendeeid, sessionid));
 
         }
 
@@ -141,7 +137,7 @@ public class AttendeesServerlet extends HttpServlet {
         }
 
     }
-
+*/
     @Override
     public String getServletInfo() {
         return "Short description";

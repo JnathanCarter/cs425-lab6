@@ -17,8 +17,7 @@ public class DAOFactory {
             Context initContext = (Context) envContext.lookup("java:/comp/env");
             ds = (DataSource) initContext.lookup("jdbc/db_pool");
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -34,26 +33,24 @@ public class DAOFactory {
                 c = ds.getConnection();
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return c;
 
     }
-    
+
     public RegistrationDAO getRegistrationDAO() {
         return new RegistrationDAO(this);
     }
-/*
-    public AttendeesDAO getAttendeesDAO(){
+
+    public AttendeesDAO getAttendeesDAO() {
         return new AttendeesDAO(this);
     }
-   */  
-     public TrainingSessionsDAO getTrainingSessionsDAO(){
+
+    public TrainingSessionsDAO getTrainingSessionsDAO() {
         return new TrainingSessionsDAO(this);
     }
-
 
 }

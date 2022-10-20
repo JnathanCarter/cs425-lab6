@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class AttendeesDAO {
         private final DAOFactory daoFactory;
 
-        private final String QUERY_REGISTRATION_NUMBER = "SELECT CONCAT(\"R\", LPAD(?, 6, 0)) AS num FROM registration WHERE attendeeid = ?";
+        private final String QUERY_REGISTRATION_NUMBER = "SELECT CONCAT(\"R\", LPAD(attendeeid, 6, 0)) AS num FROM registration WHERE attendeeid = ?";
         private final String QUERY_SELECT_BY_ID = "SELECT * FROM attendee a WHERE id = ?";
         private final String QUERY_CREATE = "INSERT INTO attendee (firstname, lastname, displayname) VALUES (?,?,?)";
         private final String QUERY_UPDATE = "UPDATE attendee SET firstname = ?, lastname = ?, displayname = ? WHERE id = 51";
@@ -90,57 +90,7 @@ public class AttendeesDAO {
                         }
 
                 }
-
-                try {
-
-                        ps = conn.prepareStatement(QUERY_REGISTRATION_NUMBER);
-                        ps.setInt(1, attendeeid);
-
-                        boolean hasresults = ps.execute();
-
-                        if (hasresults) {
-
-                                rs = ps.getResultSet();
-
-                                if (rs.next()) {
-
-                                        json.put("registationnumber", rs.getString("num"));
-
-                                }
-
-                        }
-
-                } catch (Exception e) {
-                        e.printStackTrace();
-                } finally {
-
-                        if (rs != null) {
-                                try {
-                                        rs.close();
-                                        rs = null;
-                                } catch (Exception e) {
-                                        e.printStackTrace();
-                                }
-                        }
-                        if (ps != null) {
-                                try {
-                                        ps.close();
-                                        ps = null;
-                                } catch (Exception e) {
-                                        e.printStackTrace();
-                                }
-                        }
-                        if (conn != null) {
-                                try {
-                                        conn.close();
-                                        conn = null;
-                                } catch (Exception e) {
-                                        e.printStackTrace();
-                                }
-                        }
-
-                }
-
+                json.put("registrationnumber", getRegistrationNumberByAttendeeID(attendeeid));
                 return JSONValue.toJSONString(json);
         }
 
@@ -174,8 +124,8 @@ public class AttendeesDAO {
                         ps = conn.prepareStatement(QUERY_CREATE, Statement.RETURN_GENERATED_KEYS);
 
                         ps.setString(1, firstname);
-                        ps.setString(2, firstname);
-                        ps.setString(3, firstname);
+                        ps.setString(2, lastname);
+                        ps.setString(3, displayname);
                         int updateCount = ps.executeUpdate();
 
                         if (updateCount > 0) {
@@ -224,9 +174,62 @@ public class AttendeesDAO {
          * @param attendeeid
          * @return
          */
-        /*
-         * private String getRegistrationNumberByAttendeeID(int attendeeid) {
-         * 
-         * }
-         */
+
+        private String getRegistrationNumberByAttendeeID(int attendeeid) {
+
+                Connection conn = daoFactory.getConnection();
+                PreparedStatement ps = null;
+                ResultSet rs = null;
+                String result = "";
+                try {
+
+                        ps = conn.prepareStatement(QUERY_REGISTRATION_NUMBER);
+                        ps.setInt(1, attendeeid);
+
+                        boolean hasresults = ps.execute();
+
+                        if (hasresults) {
+
+                                rs = ps.getResultSet();
+
+                                if (rs.next()) {
+
+                                        result = rs.getString("num");
+
+                                }
+
+                        }
+
+                } catch (Exception e) {
+                        e.printStackTrace();
+                } finally {
+
+                        if (rs != null) {
+                                try {
+                                        rs.close();
+                                        rs = null;
+                                } catch (Exception e) {
+                                        e.printStackTrace();
+                                }
+                        }
+                        if (ps != null) {
+                                try {
+                                        ps.close();
+                                        ps = null;
+                                } catch (Exception e) {
+                                        e.printStackTrace();
+                                }
+                        }
+                        if (conn != null) {
+                                try {
+                                        conn.close();
+                                        conn = null;
+                                } catch (Exception e) {
+                                        e.printStackTrace();
+                                }
+                        }
+
+                }
+                return result;
+        }
 }

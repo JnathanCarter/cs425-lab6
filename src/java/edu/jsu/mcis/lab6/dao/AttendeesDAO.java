@@ -25,6 +25,7 @@ public class AttendeesDAO {
         /**
          * retrieve the profile information for an attendee (that is, the attendee's
          * first name, last name, and display name),
+         * STATUS:COMPLETED & TESTED
          * 
          * @param attendeeid
          * @return
@@ -171,6 +172,8 @@ public class AttendeesDAO {
          * if an attendee is registered whose ID has a value of 76, the registration
          * number should be "R000076".
          * 
+         * Helper method for find()
+         * 
          * @param attendeeid
          * @return
          */
@@ -232,4 +235,54 @@ public class AttendeesDAO {
                 }
                 return result;
         }
+
+        public String update(int id, String firstname, String lastname, String displayname) {
+                JSONObject json = new JSONObject();
+
+                json.put("success", false);
+                PreparedStatement ps = null;
+                ResultSet rs = null;
+
+                try {
+                        Connection conn = daoFactory.getConnection();
+
+                        ps = conn.prepareStatement(QUERY_UPDATE);
+                        ps.setInt(4, id);
+                        ps.setString(1, firstname);
+                        ps.setString(2, lastname);
+                        ps.setString(4, displayname);
+
+                        int updateCount = ps.executeUpdate();
+
+                        if (updateCount > 0) {
+                                json.put("success", true);
+                                json.put("rowsAffected", updateCount);
+
+                        }
+
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+
+                finally {
+
+                        if (rs != null) {
+                                try {
+                                        rs.close();
+                                } catch (Exception e) {
+                                        e.printStackTrace();
+                                }
+                        }
+                        if (ps != null) {
+                                try {
+                                        ps.close();
+                                } catch (Exception e) {
+                                        e.printStackTrace();
+                                }
+                        }
+
+                }
+                return JSONValue.toJSONString(json);
+        }
+
 }

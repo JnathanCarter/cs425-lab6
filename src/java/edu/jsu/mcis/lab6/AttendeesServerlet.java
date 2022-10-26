@@ -77,14 +77,13 @@ public class AttendeesServerlet extends HttpServlet {
 
             AttendeesDAO dao = daoFactory.getAttendeesDAO();
 
-            out.println(dao.create(firstname,lastname, displayname));
+            out.println(dao.create(firstname, lastname, displayname));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /*
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
 
@@ -102,8 +101,11 @@ public class AttendeesServerlet extends HttpServlet {
             }
 
             // get id parameter from request
-            int attendeeid = Integer.parseInt(parameters.get("attendeeid"));
-            int sessionid = Integer.parseInt(parameters.get("sessionid"));
+            int id = Integer.parseInt(parameters.get("attendeeid"));
+            String firstname = (String) parameters.get("firstname");
+            String lastname = (String) parameters.get("lastname");
+            String displayname = (String) parameters.get("displayname");
+
             // rest of servlet code goes here
 
             DAOFactory daoFactory = null;
@@ -120,7 +122,7 @@ public class AttendeesServerlet extends HttpServlet {
 
             AttendeesDAO dao = daoFactory.getAttendeesDAO();
 
-            out.println(dao.update(attendeeid, sessionid));
+            out.println(dao.update(id, firstname, lastname, displayname));
 
         }
 
@@ -137,7 +139,7 @@ public class AttendeesServerlet extends HttpServlet {
         }
 
     }
-*/
+
     @Override
     public String getServletInfo() {
         return "Short description";

@@ -95,6 +95,7 @@ public class RegistrationServlet extends HttpServlet {
                 parameters.put(pair[0], pair[1]);
             }
 
+            System.err.println(parameters);
             // get id parameter from request
             int attendeeid_old = Integer.parseInt(parameters.get("attendeeid_old"));
             int sessionid_old = Integer.parseInt(parameters.get("sessionid_old"));

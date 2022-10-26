@@ -19,7 +19,7 @@ public class RegistrationDAO {
             + "VALUES (?,?)";
 
     private final String QUERY_UPDATE = "UPDATE registration SET attendeeid = ?, sessionid = ?"
-            + "WHERE (attendeeid = ? AND sessionid = ?)";
+            + " WHERE (attendeeid = ? AND sessionid = ?)";
 
     private final String QUERY_DELETE = "DELETE FROM registration WHERE (attendeeid = ? AND sessionid = ?)";
 
@@ -167,6 +167,9 @@ public class RegistrationDAO {
      * @return
      */
     public String update(int sessionid_old, int attendeeid_old, int sessionid_updated, int attendeeid_updated) {
+        //todo refactor to delete existing record and replace with a new one
+        
+        
         JSONObject json = new JSONObject();
 
         json.put("success", false);

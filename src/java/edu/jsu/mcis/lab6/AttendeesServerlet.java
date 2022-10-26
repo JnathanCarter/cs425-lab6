@@ -86,8 +86,6 @@ public class AttendeesServerlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
-
-        // get parameters from the request
         BufferedReader br = null;
         response.setContentType("application/json;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -95,13 +93,15 @@ public class AttendeesServerlet extends HttpServlet {
             String p = URLDecoder.decode(br.readLine().trim(), Charset.defaultCharset());
             HashMap<String, String> parameters = new HashMap<>();
             String[] pairs = p.trim().split("&");
-
             for (int i = 0; i < pairs.length; ++i) {
                 String[] pair = pairs[i].split("=");
+                parameters.put(pair[0], pair[1]);
             }
 
-            // get id parameter from request
+            System.err.println(parameters);
             int id = Integer.parseInt(parameters.get("attendeeid"));
+
+            // get id parameter from request
             String firstname = (String) parameters.get("firstname");
             String lastname = (String) parameters.get("lastname");
             String displayname = (String) parameters.get("displayname");

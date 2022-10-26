@@ -12,7 +12,7 @@ public class AttendeesDAO {
         private final String QUERY_REGISTRATION_NUMBER = "SELECT CONCAT(\"R\", LPAD(attendeeid, 6, 0)) AS num FROM registration WHERE attendeeid = ?";
         private final String QUERY_SELECT_BY_ID = "SELECT * FROM attendee a WHERE id = ?";
         private final String QUERY_CREATE = "INSERT INTO attendee (firstname, lastname, displayname) VALUES (?,?,?)";
-        private final String QUERY_UPDATE = "UPDATE attendee SET firstname = ?, lastname = ?, displayname = ? WHERE id = 51";
+        private final String QUERY_UPDATE = "UPDATE attendee SET firstname = ?, lastname = ?, displayname = ? WHERE id = ?";
 
         AttendeesDAO(DAOFactory dao) {
                 this.daoFactory = dao;
@@ -237,7 +237,9 @@ public class AttendeesDAO {
         }
 
         public String update(int id, String firstname, String lastname, String displayname) {
-                JSONObject json = new JSONObject();
+                                    System.err.println("--------------got to into update function");
+   
+            JSONObject json = new JSONObject();
 
                 json.put("success", false);
                 PreparedStatement ps = null;
@@ -250,7 +252,9 @@ public class AttendeesDAO {
                         ps.setInt(4, id);
                         ps.setString(1, firstname);
                         ps.setString(2, lastname);
-                        ps.setString(4, displayname);
+                        ps.setString(3, displayname);
+                        
+                        System.err.println("--------------got to before ps.execute()");
 
                         int updateCount = ps.executeUpdate();
 

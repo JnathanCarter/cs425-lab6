@@ -176,29 +176,34 @@ public class RegistrationDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        try {
-            Connection conn = daoFactory.getConnection();
+        String deleteresult = this.delete(sessionid_old, attendeeid_old);
+        String createresult = this.create(sessionid_updated, attendeeid_updated);
+
+/*
+ 
+try {
+    Connection conn = daoFactory.getConnection();
     
             ps = conn.prepareStatement(QUERY_UPDATE);
             ps.setInt(1, attendeeid_old);
             ps.setInt(2, sessionid_old);
             ps.setInt(3, attendeeid_updated);
             ps.setInt(4, sessionid_updated);
-
+            
             int updateCount = ps.executeUpdate();
-
+            
             if (updateCount > 0) {
                 json.put("success", true);
                 json.put("rowsAffected", updateCount);
 
             }
-
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        
         finally {
-
+            
             if (rs != null) {
                 try {
                     rs.close();
@@ -213,9 +218,10 @@ public class RegistrationDAO {
                     e.printStackTrace();
                 }
             }
-
+            
         }
-        return JSONValue.toJSONString(json);
+        */
+        return deleteresult + createresult;
     }
 
     // Cancel a registration for a previously-registered attendee.
@@ -223,11 +229,11 @@ public class RegistrationDAO {
 
     public String delete(int attendeeid, int sessionid) {
         JSONObject json = new JSONObject();
-
+        
         json.put("success", false);
         PreparedStatement ps = null;
         ResultSet rs = null;
-
+        
         try {
             Connection conn = daoFactory.getConnection();
 

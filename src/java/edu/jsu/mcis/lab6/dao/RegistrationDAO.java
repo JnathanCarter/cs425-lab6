@@ -154,7 +154,9 @@ public class RegistrationDAO {
         }
         return JSONValue.toJSONString(json);
     }
-
+    
+    
+    
     // Update a registration for a previously-registered attendee (to change their
     // assigned session)
     // PUT REQUEST

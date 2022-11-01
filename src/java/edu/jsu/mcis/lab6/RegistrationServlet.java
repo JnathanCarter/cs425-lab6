@@ -47,6 +47,10 @@ public class RegistrationServlet extends HttpServlet {
 
     }
 
+    /**
+     * @param request
+     * @param response
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         // INSERT YOUR CODE HERE
@@ -65,12 +69,39 @@ public class RegistrationServlet extends HttpServlet {
         response.setContentType("application/json; charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            int sessionid = Integer.parseInt(request.getParameter("sessionid"));
-            int attendeeid = Integer.parseInt(request.getParameter("attendeeid"));
-
             RegistrationDAO dao = daoFactory.getRegistrationDAO();
 
-            out.println(dao.create(sessionid, attendeeid));
+            // check if id parameter
+            if (request.getParameterMap().containsKey("sessionid")
+                    && request.getParameterMap().containsKey("sessionid")) {
+
+                int sessionid = Integer.parseInt(request.getParameter("sessionid"));
+                int attendeeid = Integer.parseInt(request.getParameter("attendeeid"));
+
+                out.println(dao.create(sessionid, attendeeid));
+            } else if (request.getParameterMap().containsKey("firstname")
+                    && request.getParameterMap().containsKey("lastname")
+                    && request.getParameterMap().containsKey("displayname")) {
+
+                // get parameters
+                int sessionid = Integer.parseInt(request.getParameter("sessionid"));
+                String firstname = request.getParameter("firstname");
+                String lastname = request.getParameter("lastname");
+                String displayname = request.getParameter("displayname");
+
+                // get attendee id
+
+                int attendeeid = 0;
+
+                // call create fuction
+                out.println(dao.create(sessionid, attendeeid));
+
+            } else {
+
+                Exception notvalideException = new Exception("Args not valid");
+                throw notvalideException;
+
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,7 +114,7 @@ public class RegistrationServlet extends HttpServlet {
         // get parameters from the request
         BufferedReader br = null;
         response.setContentType("application/json;charset=UTF-8");
-        
+
         try (PrintWriter out = response.getWriter()) {
             br = new BufferedReader(new InputStreamReader(request.getInputStream()));
             String p = URLDecoder.decode(br.readLine().trim(), Charset.defaultCharset());

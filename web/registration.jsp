@@ -1,11 +1,24 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
+<%@page import="edu.jsu.mcis.lab6.dao.*"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    DAOFactory daoFactory = null;
+    ServletContext context = request.getServletContext();
 
+    if (context.getAttribute("daoFactory") == null) {
+        System.err.println("*** Creating new DAOFactory ...");
+        daoFactory = new DAOFactory();
+        context.setAttribute("daoFactory", daoFactory);
+    }
+    else {
+        daoFactory = (DAOFactory) context.getAttribute("daoFactory");
+    }
+    
+    TrainingSessionsDAO sessionDAO = daoFactory.getTrainingSessionsDAO();
+        
+%>
+<!DOCTYPE html>
+<html>
+    
 <head>
     <title>TODO supply a title</title>
     <meta charset="UTF-8">
@@ -13,8 +26,9 @@ and open the template in the editor.
 </head>
 
 <body>
+    
     <div>
-        <form action="RegistrationServlet" method="POST">
+        <form action="registrations" method="POST">
             <fieldset>
                 <legend>Register For a Session</legend>
 
@@ -27,7 +41,9 @@ and open the template in the editor.
                 <label for=displayname>Display Name</label>
                 <input type="text" id="displayname" name="displayname"><!-- comment -->
 
-                <p>Session ID <span id="sessionlist"></span></p>
+                        <p>Session ID 
+                            <%= sessionDAO.getSessionListAsHTML() %>
+                        </p>
 
                 <input type="submit" value="submit">
             </fieldset>
@@ -35,10 +51,7 @@ and open the template in the editor.
 
 
 
-        <script src="UtilityScripts.js">
-            UtilityScripts.getSessionlist();
-        </script>
-
+        
 
 
 

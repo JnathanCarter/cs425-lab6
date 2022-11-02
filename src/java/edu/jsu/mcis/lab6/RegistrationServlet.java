@@ -12,6 +12,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
 
 public class RegistrationServlet extends HttpServlet {
 
@@ -84,17 +85,20 @@ public class RegistrationServlet extends HttpServlet {
                     && request.getParameterMap().containsKey("displayname")) {
 
                 // get parameters
-                int sessionid = Integer.parseInt(request.getParameter("sessionid"));
+
+                int sessionid = Integer.parseInt(request.getParameter("sessionmenu"));
                 String firstname = request.getParameter("firstname");
                 String lastname = request.getParameter("lastname");
-                String displayname = request.getParameter("displayname");
 
                 // get attendee id
 
-                int attendeeid = 0;
+                AttendeesDAO attendeeDAO = daoFactory.getAttendeesDAO();
+                int attendeeid = attendeeDAO.findID(firstname, lastname);
 
                 // call create fuction
+                System.err.println("attendee id============"+attendeeid);
                 out.println(dao.create(sessionid, attendeeid));
+                response.sendRedirect("registration.jsp");
 
             } else {
 
@@ -102,8 +106,10 @@ public class RegistrationServlet extends HttpServlet {
                 throw notvalideException;
 
             }
-
+        response.sendRedirect("registration.jsp");
         } catch (Exception e) {
+            
+            
             e.printStackTrace();
         }
     }

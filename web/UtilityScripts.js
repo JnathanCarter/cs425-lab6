@@ -1,31 +1,40 @@
 var UtilityScripts = (function () {
 
-    var createSessionMenu = function (sessions) {
-        $("#sessionlist").append("<select title=\"sessionmenu\" id=\"sessionmenu\">" + "</select name>");
-
-        sessions.forEach(element => {
-            $("#sessionmenu").append("<option value=\"" + element['id'] + "\">" + element['id'] + " (" + element['description'] + ")");
-        });
-    };
+  
 
 
     return {
-        getSessionlist: function () {
-            //get from api
-            $.ajax({
-                url: 'http://localhost:8180/Lab6/TrainingSessionServerlet',
-                method: 'GET',
-                dataType: 'json',
-                success: function (response) {
-
-                    createSessionMenu(response);
-
-                }
-            })
-
-        },
+        
     updateAttendee: function(){
-        $("#output").append("success");
+        var that  = this;
+        $("#output").append("got to updateAttendee");
+        //get value of the attendee id
+        var id =$("#attendeemenu").val().trim();
+
+        //get new value for the firstname,lastname,displayname
+        var firstname = $("#firstname").val().trim();
+        var lastname = $("#lastname").val().trim();
+        var displayname = $("#displayname").val().trim();
+    data = {"firstname":firstname, "lastname":lastname, "attendeeid":id,"displayname":displayname};
+
+        //ajax put request to attendess serverlet
+        $.ajax({
+            url: 'http://localhost:8180/Lab6/Attendees',
+            method: 'PUT',
+            data:data,
+            success: function (response) {
+                that.success(response);
+            }
+        });
+
+    
+        //directly output response to output div
+
+    },
+    success: function(response){
+        $("#output").append(response);
+
     }
+
     };
 })();

@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class TrainingSessionsDAO {
     private final DAOFactory daoFactory;
- private final String QUERY_SESSION_LIST = "SELECT * FROM session";
+    private final String QUERY_SESSION_LIST = "SELECT * FROM session";
     private final String QUERY_SELECT_ALL = "SELECT * FROM session";
     private final String QUERY_SELECT_BY_ID = "SELECT * FROM (registration JOIN attendee ON attendee.id=registration.attendeeid) WHERE registration.sessionid = ?";
 
@@ -168,8 +168,9 @@ public class TrainingSessionsDAO {
 
         return JSONValue.toJSONString(json);
     }
- public String getSessionListAsHTML() {
-        
+
+    public String getSessionListAsHTML() {
+
         StringBuilder s = new StringBuilder();
 
         Connection conn = daoFactory.getConnection();
@@ -179,61 +180,62 @@ public class TrainingSessionsDAO {
         try {
 
             ps = conn.prepareStatement(QUERY_SESSION_LIST);
-            
+
             boolean hasresults = ps.execute();
 
             if (hasresults) {
 
                 rs = ps.getResultSet();
-                
+
                 s.append("<select name=\"sessionmenu\" id=\"sessionmenu\">");
-                
+
                 while (rs.next()) {
-                    
+
                     int id = rs.getInt("id");
                     String description = rs.getString("description");
-                    
+
                     s.append("<option value=\"").append(id).append("\">");
                     s.append(description);
                     s.append("</option>");
-                                        
+
                 }
-                
+
                 s.append("</select>");
 
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
 
             if (rs != null) {
                 try {
                     rs.close();
                     rs = null;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                catch (Exception e) { e.printStackTrace(); }
             }
             if (ps != null) {
                 try {
                     ps.close();
                     ps = null;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                catch (Exception e) { e.printStackTrace(); }
             }
             if (conn != null) {
                 try {
                     conn.close();
                     conn = null;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                catch (Exception e) { e.printStackTrace(); }
             }
 
         }
-        
+
         return s.toString();
-        
+
     }
 }

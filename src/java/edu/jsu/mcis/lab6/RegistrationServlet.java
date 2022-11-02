@@ -69,6 +69,7 @@ public class RegistrationServlet extends HttpServlet {
 
         response.setContentType("application/json; charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+                    AttendeesDAO attendeeDAO = daoFactory.getAttendeesDAO();
 
             RegistrationDAO dao = daoFactory.getRegistrationDAO();
 
@@ -89,17 +90,31 @@ public class RegistrationServlet extends HttpServlet {
                 int sessionid = Integer.parseInt(request.getParameter("sessionmenu"));
                 String firstname = request.getParameter("firstname");
                 String lastname = request.getParameter("lastname");
+                String displayname = request.getParameter("displayname");
 
-                // get attendee id
+                // get attendee id if attendee is not a new attendee
+                if(attendeeDAO.findID(firstname, lastname)!= 0){
 
-                AttendeesDAO attendeeDAO = daoFactory.getAttendeesDAO();
-                int attendeeid = attendeeDAO.findID(firstname, lastname);
+                    int attendeeid = attendeeDAO.findID(firstname, lastname);
 
-                // call create fuction
-                System.err.println("attendee id============"+attendeeid);
-                out.println(dao.create(sessionid, attendeeid));
-                response.sendRedirect("registration.jsp");
-
+                    // call create fuction
+                    System.err.println("attendee id============"+attendeeid);
+                    out.println(dao.create(sessionid, attendeeid));
+                    response.sendRedirect("registration.jsp");
+                }
+                //create a new attendee 
+                else{
+                    //create new attendee
+                    attendeeDAO.create(firstname, lastname, displayname);
+                    
+                    //getid
+                    int attendeeid = attendeeDAO.findID(firstname, lastname);
+                    //make registration
+                    out.println(dao.create(sessionid, attendeeid));
+                    //redirect
+                    response.sendRedirect("registration.jsp");
+                }
+                
             } else {
 
                 Exception notvalideException = new Exception("Args not valid");

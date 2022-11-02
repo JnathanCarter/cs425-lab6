@@ -231,6 +231,8 @@ public class AttendeesDAO {
 
         public String update(int id, String firstname, String lastname, String displayname) {
                 System.err.println("--------------got to into update function");
+                
+                System.err.println("ID: " + id + ", First: " + firstname + ", Last: " + lastname + ", Display: " + displayname);
 
                 JSONObject json = new JSONObject();
 
@@ -255,6 +257,9 @@ public class AttendeesDAO {
                                 json.put("success", true);
                                 json.put("rowsAffected", updateCount);
 
+                        }
+                        else {
+                            System.err.println("Update Count: " + updateCount);
                         }
 
                 } catch (Exception e) {

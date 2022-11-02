@@ -22,8 +22,11 @@ var UtilityScripts = (function () {
             url: 'http://localhost:8180/Lab6/Attendees',
             method: 'PUT',
             data:data,
+            dataType: 'json',
             success: function (response) {
-                that.success(response);
+                //that.success(response);
+                if (response.success === true)
+                    $("#output").html("Update saved successfully!");
             }
         });
 

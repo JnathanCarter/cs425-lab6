@@ -86,6 +86,7 @@ public class AttendeesServerlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) {
+       
         BufferedReader br = null;
         response.setContentType("application/json;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -97,8 +98,8 @@ public class AttendeesServerlet extends HttpServlet {
                 String[] pair = pairs[i].split("=");
                 parameters.put(pair[0], pair[1]);
             }
-
-            System.err.println(parameters);
+            
+            System.err.println(p);
             int id = Integer.parseInt(parameters.get("attendeeid"));
 
             // get id parameter from request

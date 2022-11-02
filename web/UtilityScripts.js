@@ -23,6 +23,9 @@ var UtilityScripts = (function () {
                 }
             })
 
-        }
+        },
+    updateAttendee: function(){
+        $("#output").append("success");
+    }
     };
 })();

@@ -44,27 +44,25 @@ var UtilityScripts = (function () {
                 success: function (response) {
                     //that.success(response);
                     if (response[0].success === true) {
-
                         //directly output response to output div
                         console.log(response);
+                        
                         //add table of the json information
-                        //$("#output").append(JSON.stringify(response));
-                        var test = "<tr><th>Attendee Id</th><th>Session Id</th><th>Firstname</th><th>Lastname</th><th>Display Name</th></tr>";
+                        var htmlstring = "<tr><th>Attendee Id</th><th>Session Id</th><th>Firstname</th><th>Lastname</th><th>Display Name</th></tr>";
                         for (let i = 1; i < response.length; i++) {
 
-                            test += "<tr>";
+                            htmlstring += "<tr>";
+                            
                             for (const key in response[i]) {
                                 console.log(key, response[i][key]);
-                                test += "<td>";
-                                test += response[i][key];
-                                test += "</td>";
+                                htmlstring += "<td>";
+                                htmlstring += response[i][key];
+                                htmlstring += "</td>";
                             }
-                            console.log("-----------------------");
-                            test += "</tr>";
-
+                           
+                            htmlstring += "</tr>";
                         }
-                        console.log(test);
-                        $("#outputtable").html(test);
+                        $("#outputtable").html(htmlstring);
                     }
                 }
             });

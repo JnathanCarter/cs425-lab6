@@ -38,7 +38,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>main/index.html</welcome-file>
+        <welcome-file>main/index.jsp</welcome-file>
     </welcome-file-list>
     <security-constraint>
         <display-name>main</display-name>

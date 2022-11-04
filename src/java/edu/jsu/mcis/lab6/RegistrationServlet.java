@@ -69,7 +69,7 @@ public class RegistrationServlet extends HttpServlet {
 
         response.setContentType("application/json; charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-                    AttendeesDAO attendeeDAO = daoFactory.getAttendeesDAO();
+            AttendeesDAO attendeeDAO = daoFactory.getAttendeesDAO();
 
             RegistrationDAO dao = daoFactory.getRegistrationDAO();
 
@@ -93,38 +93,37 @@ public class RegistrationServlet extends HttpServlet {
                 String displayname = request.getParameter("displayname");
 
                 // get attendee id if attendee is not a new attendee
-                if(attendeeDAO.findID(firstname, lastname)!= 0){
+                if (attendeeDAO.findID(firstname, lastname) != 0) {
 
                     int attendeeid = attendeeDAO.findID(firstname, lastname);
 
                     // call create fuction
-                    System.err.println("attendee id============"+attendeeid);
+                    System.err.println("attendee id============" + attendeeid);
                     out.println(dao.create(sessionid, attendeeid));
                     response.sendRedirect("registration.jsp");
                 }
-                //create a new attendee 
-                else{
-                    //create new attendee
+                // create a new attendee
+                else {
+                    // create new attendee
                     attendeeDAO.create(firstname, lastname, displayname);
-                    
-                    //getid
+
+                    // getid
                     int attendeeid = attendeeDAO.findID(firstname, lastname);
-                    //make registration
+                    // make registration
                     out.println(dao.create(sessionid, attendeeid));
-                    //redirect
+                    // redirect
                     response.sendRedirect("registration.jsp");
                 }
-                
+
             } else {
 
                 Exception notvalideException = new Exception("Args not valid");
                 throw notvalideException;
 
             }
-        response.sendRedirect("registration.jsp");
+            response.sendRedirect("registration.jsp");
         } catch (Exception e) {
-            
-            
+
             e.printStackTrace();
         }
     }

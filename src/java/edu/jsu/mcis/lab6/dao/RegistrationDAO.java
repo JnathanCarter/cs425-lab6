@@ -105,7 +105,7 @@ public class RegistrationDAO {
      * Add a registration for a new attendee (a person not already registered for a
      * session)
      * POST REQUEST for testing = curl -v -X POST
-     192.168.1.178:8180/Lab6/registrations -d attendeeid=2 -d sessionid=2
+     * 192.168.1.178:8180/Lab6/registrations -d attendeeid=2 -d sessionid=2
      * 
      */
     public String create(int sessionid, int attendeeid) {
@@ -154,9 +154,7 @@ public class RegistrationDAO {
         }
         return JSONValue.toJSONString(json);
     }
-    
-    
-    
+
     // Update a registration for a previously-registered attendee (to change their
     // assigned session)
     // PUT REQUEST
@@ -169,73 +167,78 @@ public class RegistrationDAO {
      * @return
      */
     public String update(int sessionid_old, int attendeeid_old, int sessionid_updated, int attendeeid_updated) {
-        //todo refactor to delete existing record and replace with a new one
-        
-        
+        // todo refactor to delete existing record and replace with a new one
+
         JSONObject json = new JSONObject();
 
         json.put("success", false);
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String deleteresult = this.delete(sessionid_old, attendeeid_old);
+        String deleteresult = this.delete(attendeeid_old, sessionid_old);
         String createresult = this.create(sessionid_updated, attendeeid_updated);
 
-/*
- 
-try {
-    Connection conn = daoFactory.getConnection();
-    
-            ps = conn.prepareStatement(QUERY_UPDATE);
-            ps.setInt(1, attendeeid_old);
-            ps.setInt(2, sessionid_old);
-            ps.setInt(3, attendeeid_updated);
-            ps.setInt(4, sessionid_updated);
-            
-            int updateCount = ps.executeUpdate();
-            
-            if (updateCount > 0) {
-                json.put("success", true);
-                json.put("rowsAffected", updateCount);
-
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        finally {
-            
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            
-        }
-        */
+        /*
+         * 
+         * try {
+         * Connection conn = daoFactory.getConnection();
+         * 
+         * ps = conn.prepareStatement(QUERY_UPDATE);
+         * ps.setInt(1, attendeeid_old);
+         * ps.setInt(2, sessionid_old);
+         * ps.setInt(3, attendeeid_updated);
+         * ps.setInt(4, sessionid_updated);
+         * 
+         * int updateCount = ps.executeUpdate();
+         * 
+         * if (updateCount > 0) {
+         * json.put("success", true);
+         * json.put("rowsAffected", updateCount);
+         * 
+         * }
+         * 
+         * } catch (Exception e) {
+         * e.printStackTrace();
+         * }
+         * 
+         * finally {
+         * 
+         * if (rs != null) {
+         * try {
+         * rs.close();
+         * } catch (Exception e) {
+         * e.printStackTrace();
+         * }
+         * }
+         * if (ps != null) {
+         * try {
+         * ps.close();
+         * } catch (Exception e) {
+         * e.printStackTrace();
+         * }
+         * }
+         * 
+         * }
+         */
         return deleteresult + createresult;
     }
 
     // Cancel a registration for a previously-registered attendee.
     // DELETE REQUEST
-
+    /**
+     * 
+     * @param attendeeid
+     * @param sessionid
+     * @return
+     */
     public String delete(int attendeeid, int sessionid) {
+
         JSONObject json = new JSONObject();
-        
+
         json.put("success", false);
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             Connection conn = daoFactory.getConnection();
 
@@ -246,6 +249,7 @@ try {
             int updateCount = ps.executeUpdate();
 
             if (updateCount > 0) {
+                System.err.println("succesfull delete");
                 json.put("success", true);
                 json.put("rowsAffected", updateCount);
 

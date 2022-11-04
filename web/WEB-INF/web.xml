@@ -54,6 +54,7 @@
     </security-constraint>
     <login-config>
         <auth-method>BASIC</auth-method>
+        <realm-name>jdbc/auth</realm-name>
     </login-config>
     <security-role>
         <description/>

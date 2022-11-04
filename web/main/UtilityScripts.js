@@ -19,7 +19,7 @@ var UtilityScripts = (function () {
 
             //ajax put request to attendess serverlet
             $.ajax({
-                url: 'http://localhost:8180/Lab6/Attendees',
+                url: 'http://localhost:8180/Lab6/main/Attendees',
                 method: 'PUT',
                 data: data,
                 dataType: 'json',
@@ -37,7 +37,7 @@ var UtilityScripts = (function () {
         getSessionInfo: function () {
             console.log("get Session Info");
             var sessionid = $("#sessionmenu").val().trim();
-            var url = 'http://localhost:8180/Lab6/TrainingSessionServerlet?id=' + sessionid;
+            var url = 'http://localhost:8180/Lab6/main/TrainingSessionServerlet?id=' + sessionid;
             $.ajax({
                 url: url,
                 method: 'GET',
@@ -80,7 +80,7 @@ var UtilityScripts = (function () {
             data = { "attendeeid_old": attendeeid_old, "sessionid_old": sessionid_old, "attendeeid_updated": attendeeid_update, "sessionid_updated": sessionid_update };
 
             $.ajax({
-                url: 'http://localhost:8180/Lab6/registrations',
+                url: 'http://localhost:8180/Lab6/main/registrations',
                 method: 'PUT',
                 data: data,
                 dataType: 'json',
@@ -98,7 +98,7 @@ var UtilityScripts = (function () {
             data = { "attendeeid": attendeeid, "sessionid": sessionid };
 
             $.ajax({
-                url: 'http://localhost:8180/Lab6/registrations',
+                url: 'http://localhost:8180/Lab6/main/registrations',
                 method: 'DELETE',
                 data: data,
                 dataType: 'json',
